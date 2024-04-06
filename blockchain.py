@@ -34,16 +34,43 @@ class Block():
 class Blockchain():
     difficulty = 4
     
-def _init_(self, chain = []):
-    self.chain = chain
+    def __init__(self, chain = []):
+        self.chain = chain
     
     def add(self, block):
-        self.chain.append({'hash': block.hash(), 'previous': block.previous_hash, 'number': block.number, 'data': block.data, 'nonce': block.nonce})
+        self.chain.append({
+        'hash': block.hash(), 
+        'previous': block.previous_hash, 
+        'number': block.number, 
+        'data': block.data, 
+        'nonce': block.nonce})
         
 
+    def mine(self, block):
+        try:
+            block.previous_hash = self.chain[-1].get('hash')
+        except:
+            pass
+        
+        while True:
+            if block.hash()[:4] == "0"*self.difficulty:
+                self.add(block);break
+            else:
+                block.nonce += 1
+
 def main():
-    block = Block("hello", 1)
-    print(block)
+    blockchain = Blockchain()
+    database = ["hello world", "hello blockchain", "hello everyone", "bye"]
+    
+    num = 0
+    for data in database:
+        num += 1
+        blockchain.mine(Block(data, num))
+    for block in blockchain.chain:
+        print(block)
+
+
+
 
 if __name__ == '__main__':
     main()
